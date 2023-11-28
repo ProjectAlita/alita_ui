@@ -20,13 +20,21 @@ def download_and_unzip(url: str, destination_path: str | Path) -> None:
         log.error(f"Failed to download the zip file. Status code: {response.status_code}")
 
 
-class API(api_tools.APIBase):
-    url_params = ['']
-
-    def get(self):
+class AdminAPI(api_tools.APIModeHandler):
+    @auth.decorators.check_api({
+        "permissions": ["models.prompts.ui.update"],
+        "recommended_roles": {
+            c.ADMINISTRATION_MODE: {"admin": True, "editor": False, "viewer": False},
+        }})
+    def get(self, **kwargs):
         return jsonify(self.module.build_meta)
 
-    def post(self):
+    @auth.decorators.check_api({
+        "permissions": ["models.prompts.ui.update"],
+        "recommended_roles": {
+            c.ADMINISTRATION_MODE: {"admin": True, "editor": False, "viewer": False},
+        }})
+    def post(self, **kwargs):
         release = request.json.get('release', 'latest')
         d = dict()
         download_and_unzip(
@@ -36,3 +44,10 @@ class API(api_tools.APIBase):
         self.module.build_meta['release'] = release
         self.module.build_meta['updated_at'] = datetime.now()
         return jsonify(d)
+
+
+class API(api_tools.APIBase):
+    url_params = ['', '<string:mode>']
+    mode_handlers = {
+        c.ADMINISTRATION_MODE: AdminAPI,
+    }
