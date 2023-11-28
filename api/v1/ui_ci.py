@@ -36,14 +36,13 @@ class AdminAPI(api_tools.APIModeHandler):
         }})
     def post(self, **kwargs):
         release = request.json.get('release', 'latest')
-        d = dict()
         download_and_unzip(
             self.module.release_url_template.format(release=release),
             Path(self.module.bp.static_folder).joinpath(self.module.alita_base_path)
         )
         self.module.build_meta['release'] = release
         self.module.build_meta['updated_at'] = datetime.now()
-        return jsonify(d)
+        return jsonify(self.module.build_meta)
 
 
 class API(api_tools.APIBase):
