@@ -21,11 +21,11 @@ def download_and_unzip(url: str, destination_path: str | Path) -> None:
 
 
 class AdminAPI(api_tools.APIModeHandler):
-    @auth.decorators.check_api({
-        "permissions": ["models.prompts.ui.update"],
-        "recommended_roles": {
-            c.ADMINISTRATION_MODE: {"admin": True, "editor": False, "viewer": False},
-        }})
+    # @auth.decorators.check_api({
+    #     "permissions": ["models.prompts.ui.detail"],
+    #     "recommended_roles": {
+    #         c.ADMINISTRATION_MODE: {"admin": True, "editor": False, "viewer": False},
+    #     }})
     def get(self, **kwargs):
         return jsonify(self.module.build_meta)
 
