@@ -14,7 +14,9 @@ class Module(module.ModuleModel):
         self.alita_base_path = Path('ui', 'dist')
         self.build_meta = {
             'release': None,
-            'updated_at': None
+            'updated_at': None,
+            'commit_sha': '',
+            'commit_ref': '',
         }
         self.release_url_template = 'https://github.com/ProjectAlita/AlitaUI/releases/download/{release}/dist.zip'
 

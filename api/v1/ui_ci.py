@@ -42,6 +42,8 @@ class AdminAPI(api_tools.APIModeHandler):
         )
         self.module.build_meta['release'] = release
         self.module.build_meta['updated_at'] = datetime.now()
+        self.module.build_meta['commit_sha'] = request.json.get('commit_sha', '')
+        self.module.build_meta['commit_ref'] = request.json.get('commit_ref', '')
         return jsonify(self.module.build_meta)
 
 
