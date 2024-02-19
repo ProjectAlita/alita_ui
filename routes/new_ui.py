@@ -1,3 +1,4 @@
+import flask
 from pathlib import Path
 
 from pylon.core.tools import web, log
@@ -14,5 +15,25 @@ class Route:
         try:
             return self.bp.send_static_file(base_path.joinpath(sub_path))
         except NotFound:
-            log.info("Route route_alita_ui_sub_path: %s; serving: %s", sub_path, base_path.joinpath('index.html'))
-            return self.bp.send_static_file(base_path.joinpath('index.html'))
+            log.info(
+                "Route route_alita_ui_sub_path: %s; serving: %s",
+                sub_path, base_path.joinpath('index.html')
+            )
+            #
+            log.info(
+                "[----- DEBUG -----] %s, %s, %s",
+                flask.request.root_path,
+                flask.request.path,
+                flask.request.endpoint,
+            )
+            #
+            idx_path = Path(self.bp.static_folder).joinpath(base_path, "index.html")
+            #
+            with open(idx_path, "r", encoding="utf-8") as idx_file:
+                idx_data = idx_file.read()
+            #
+            # idx_data = idx_data.replace('<!-- alita_ui_config -->', '')
+            idx_data = idx_data.replace('src="./assets', '')
+            #
+            response = flask.make_response(idx_data, 200)
+            return response
