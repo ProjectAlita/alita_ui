@@ -1,6 +1,6 @@
 {
   "name": "Prompt library UI",
   "version": "0.1",
-  "depends_on": ["prompt_lib", "theme"],
+  "depends_on": ["prompt_lib", "theme", "shared"],
   "init_after": []
 }
