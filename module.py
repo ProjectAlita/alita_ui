@@ -34,6 +34,7 @@ class Module(module.ModuleModel):
         #
         theme.register_mode(
             "alita", "Alita",
+            public=True,
         )
         theme.register_mode_landing(
             mode="alita",
