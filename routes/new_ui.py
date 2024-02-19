@@ -22,7 +22,7 @@ class Route:
             #
             log.info(
                 "[----- DEBUG -----] %s",
-                flask.url_for("api.v1", _external=True),
+                flask.url_for("api.v1.alita_ui.ui_ci", _external=True),
             )
             #
             idx_path = Path(self.bp.static_folder).joinpath(base_path, "index.html")
