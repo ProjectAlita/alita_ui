@@ -21,11 +21,8 @@ class Route:
             )
             #
             log.info(
-                "[----- DEBUG -----] %s, %s, %s, %s",
-                flask.request.root_path,
-                flask.request.path,
-                flask.request.endpoint,
-                flask.url_for("alita_ui.route_alita_ui")
+                "[----- DEBUG -----] %s",
+                flask.url_for("api.v1.alita_ui.ui_ci")
             )
             #
             idx_path = Path(self.bp.static_folder).joinpath(base_path, "index.html")
@@ -34,7 +31,9 @@ class Route:
                 idx_data = idx_file.read()
             #
             idx_data = idx_data.replace('<!-- alita_ui_config -->', '')
-            # idx_data = idx_data.replace('src="./assets', '')
+            #
+            vite_base_uri = flask.url_for("alita_ui.route_alita_ui").rstrip("/")
+            idx_data = idx_data.replace('src="./assets', f'src="{vite_base_uri}/assets')
             #
             response = flask.make_response(idx_data, 200)
             return response
