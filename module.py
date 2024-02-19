@@ -29,6 +29,17 @@ class Module(module.ModuleModel):
         # bp.add_url_rule('/', 'route_alita_ui', self.alita_ui_react)
         # theme.bp.add_url_rule('/alita_ui/', 'route_alita_ui', self.alita_ui_react)
         # theme.bp.add_url_rule('/alita_ui/<path:sub_path>', 'route_alita_ui_sub_path', self.alita_ui_react)
+        #
+        # Register a mode (for admin UI switch-back)
+        #
+        theme.register_mode(
+            "alita", "Alita",
+        )
+        theme.register_mode_landing(
+            mode="alita",
+            kind="route",
+            route="alita_ui.route_alita_ui",
+        )
 
     def deinit(self):
         log.info('De-initializing')
