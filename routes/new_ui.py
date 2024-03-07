@@ -29,11 +29,13 @@ class Route:
             #
             vite_base_uri = flask.url_for("alita_ui.route_alita_ui").rstrip("/")
             vite_public_project_id = int(secrets.get("ai_project_id", "1"))
+            vite_socket_path = flask.url_for("theme.socketio")
             #
             alita_ui_config = json.dumps({
                 "vite_server_url": vite_server_url,
                 "vite_base_uri": vite_base_uri,
                 "vite_public_project_id": vite_public_project_id,
+                "vite_socket_path": vite_socket_path,
             })
             #
             idx_path = Path(self.bp.static_folder).joinpath(base_path, "index.html")
