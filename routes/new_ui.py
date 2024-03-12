@@ -36,6 +36,7 @@ class Route:
                 "vite_base_uri": vite_base_uri,
                 "vite_public_project_id": vite_public_project_id,
                 "vite_socket_path": vite_socket_path,
+                "vite_socket_server": self.descriptor.config.get('vite_socket_server', '/')
             })
             #
             idx_path = Path(self.bp.static_folder).joinpath(base_path, "index.html")
