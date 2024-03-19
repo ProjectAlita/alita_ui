@@ -18,17 +18,23 @@ class Module(module.ModuleModel):
             'commit_sha': '',
             'commit_ref': '',
         }
-        self.release_url_template = 'https://github.com/ProjectAlita/AlitaUI/releases/download/{release}/dist.zip'
+        self.release_url_template = self.descriptor.config.get(
+            "release_url_template",
+            'https://github.com/ProjectAlita/AlitaUI/releases/download/{release}/dist.zip',
+        )
+        self.default_release = self.descriptor.config.get("default_release", "latest")
+        self.release_verify = self.descriptor.config.get("release_verify", True)
 
     def init(self):
         log.info('Init')
         self.bp = self.descriptor.init_all()
-        # bp = self.descriptor.make_blueprint(
-        #     url_prefix='alita_ui',
-        # )
-        # bp.add_url_rule('/', 'route_alita_ui', self.alita_ui_react)
-        # theme.bp.add_url_rule('/alita_ui/', 'route_alita_ui', self.alita_ui_react)
-        # theme.bp.add_url_rule('/alita_ui/<path:sub_path>', 'route_alita_ui_sub_path', self.alita_ui_react)
+        #
+        # Download UI if needed for first time
+        #
+        idx_test_path = Path(self.bp.static_folder).joinpath(self.alita_base_path, "index.html")
+        if not idx_test_path.exists():
+            log.info("Downloading and installing initial release: %s", self.default_release)
+            self.update_ui()
         #
         # Register a mode (for admin UI switch-back)
         #
@@ -44,11 +50,4 @@ class Module(module.ModuleModel):
 
     def deinit(self):
         log.info('De-initializing')
-
-    # def alita_ui_react(self, sub_path: str):
-    #     base_path = Path('ui', 'dist')
-    #     try:
-    #         return self.bp.send_static_file(base_path.joinpath(sub_path))
-    #     except NotFound:
-    #         log.info("Route route_alita_ui_sub_path: %s; serving: %s", sub_path, base_path.joinpath('index.html'))
-    #         return self.bp.send_static_file(base_path.joinpath('index.html'))
+        self.descriptor.deinit_all()
