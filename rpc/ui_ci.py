@@ -35,9 +35,15 @@ class RPC:  # pylint: disable=R0903
                     for name in files:
                         if name in [".gitkeep"]:
                             continue
-                        os.remove(os.path.join(root, name))
+                        try:
+                            os.remove(os.path.join(root, name))
+                        except:  # pylint: disable=W0702
+                            log.exception("Failed to remove file: %s, skipping", name)
                     for name in dirs:
-                        os.rmdir(os.path.join(root, name))
+                        try:
+                            os.rmdir(os.path.join(root, name))
+                        except:  # pylint: disable=W0702
+                            log.exception("Failed to remove dir: %s, skipping", name)
                 # Extract new files
                 zip_file.extractall(destination_path)
             #
