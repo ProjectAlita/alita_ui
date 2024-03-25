@@ -24,6 +24,7 @@ class AdminAPI(api_tools.APIModeHandler):
     def post(self, **kwargs):
         release = request.json.get('release', self.module.default_release)
         #
+        log.info("Downloading and installing release: %s", release)
         self.module.update_ui(release)
         #
         self.module.build_meta['release'] = release
