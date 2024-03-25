@@ -22,7 +22,7 @@ class AdminAPI(api_tools.APIModeHandler):
             c.ADMINISTRATION_MODE: {"admin": True, "editor": False, "viewer": False},
         }})
     def post(self, **kwargs):
-        release = request.json.get('release', 'latest')
+        release = request.json.get('release', self.module.default_release)
         #
         self.module.update_ui(release)
         #
