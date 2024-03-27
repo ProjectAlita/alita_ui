@@ -31,13 +31,23 @@ class Route:
             vite_public_project_id = int(secrets.get("ai_project_id", "1"))
             vite_socket_path = flask.url_for("theme.socketio")
             #
-            alita_ui_config = json.dumps({
+            alita_ui_config_data = {
                 "vite_server_url": vite_server_url,
                 "vite_base_uri": vite_base_uri,
                 "vite_public_project_id": vite_public_project_id,
                 "vite_socket_path": vite_socket_path,
                 "vite_socket_server": self.descriptor.config.get('vite_socket_server', '/')
-            })
+            }
+            #
+            additional_config_keys = ["vite_gaid"]
+            #
+            for key in additional_config_keys:
+                if key in secrets:
+                    alita_ui_config_data[key] = secrets.get(key)
+                elif key in self.descriptor.config:
+                    alita_ui_config_data[key] = self.descriptor.config.get(key)
+            #
+            alita_ui_config = json.dumps(alita_ui_config_data)
             #
             idx_path = Path(self.bp.static_folder).joinpath(base_path, "index.html")
             #
